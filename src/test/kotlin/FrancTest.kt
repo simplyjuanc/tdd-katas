@@ -1,4 +1,4 @@
-import org.money.org.money.Franc
+import org.money.Franc
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

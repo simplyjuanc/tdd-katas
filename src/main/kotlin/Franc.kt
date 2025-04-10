@@ -1,5 +1,5 @@
 package org.money
 
-data class Franc(val amount: Int) {
+data class Franc(override val amount: Int):Money(amount) {
     fun times(multiplier: Int) = Franc(this.amount * multiplier)
 }
