@@ -1,29 +1,31 @@
 package org.money
 
-abstract class Money(open val amount: Int) {
+abstract class Money(
+    open val amount: Int,
+    open val currency: String,
+) {
+    fun currency() = currency
+
     override fun equals(other: Any?): Boolean =
-        (other is Money) && (this.amount == other.amount)
+        (other is Money) &&
+        (amount == other.amount) &&
+        (currency == other.currency())
+
     override fun hashCode(): Int = amount
 
     abstract fun times(multiplier: Int): Money
-    abstract fun currency(): String
 
     companion object {
-        fun dollar(amount:Int) = Dollar(amount)
-
-        fun franc(amount:Int) = Franc(amount)
+        fun dollar(amount:Int) = Dollar(amount, "USD")
+        fun franc(amount:Int) = Franc(amount, "CHF")
     }
 }
 
-class Dollar(override val amount: Int) : Money(amount) {
-    override fun times(multiplier: Int) = Dollar(this.amount * multiplier)
-
-    override fun currency(): String = "USD"
+class Dollar(amount: Int, currency: String) : Money(amount, currency) {
+    override fun times(multiplier: Int) = Dollar(amount * multiplier, currency)
 }
 
-class Franc(override val amount: Int): Money(amount) {
-    override fun times(multiplier: Int) = Franc(this.amount * multiplier)
-
-    override fun currency(): String = "CHF"
+class Franc(amount: Int, currency: String): Money(amount, currency) {
+    override fun times(multiplier: Int) = Franc(amount * multiplier, currency)
 }
 
