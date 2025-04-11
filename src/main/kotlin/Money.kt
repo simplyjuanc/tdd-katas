@@ -15,11 +15,11 @@ open class Money(open val amount: Int) {
     }
 }
 
-data class Dollar(override val amount: Int) : Money(amount) {
+class Dollar(override val amount: Int) : Money(amount) {
     fun times(multiplier: Int):Money = Dollar(this.amount * multiplier)
 }
 
-data class Franc(override val amount: Int): Money(amount) {
+class Franc(override val amount: Int): Money(amount) {
     fun times(multiplier: Int):Money = Franc(this.amount * multiplier)
 }
 
