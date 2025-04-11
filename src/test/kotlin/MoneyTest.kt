@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
-import org.money.Franc
 import org.money.Money
 
 class MoneyTest {
@@ -21,21 +20,27 @@ class MoneyTest {
 
     @Test
     fun `should multiply francs correctly`() {
-        val franc = Franc(5)
+        val franc = Money.franc(5)
 
-        assertEquals(Franc(10), franc.times(2))
-        assertEquals(Franc(15), franc.times(3))
+        assertEquals(Money.franc(10), franc.times(2))
+        assertEquals(Money.franc(15), franc.times(3))
     }
 
     @Test
     fun `should assert equality between francs`() {
-        assertEquals(Franc(5), Franc(5))
-        assertNotEquals(Franc(7), Franc(6))
+        assertEquals(Money.franc(5), Money.franc(5))
+        assertNotEquals(Money.franc(7), Money.franc(6))
     }
 
     @Test
     fun `should assert equality between dollars and francs`() {
-        assertEquals(Franc(5), Money.dollar(5))
-        assertNotEquals(Franc(1), Money.dollar(14))
+        assertEquals(Money.franc(5), Money.dollar(5))
+        assertNotEquals(Money.franc(1), Money.dollar(14))
+    }
+
+    @Test
+    fun `should return the correct currency`() {
+        assertEquals("USD", Money.dollar(1).currency())
+        assertEquals("CHF", Money.franc(1).currency())
     }
 }
