@@ -13,9 +13,11 @@ open class Money(
 
     override fun hashCode(): Int = amount
 
+    override fun toString(): String = "${currency()} $amount"
+
     fun times(multiplier: Int): Money = Money(amount * multiplier, currency())
 
-    fun plus(addend: Money): Money = Money(amount + addend.amount, currency())
+    fun plus(addend: Money): Sum = Sum(this, addend)
 
     companion object {
         fun dollar(amount:Int) = Money(amount, "USD")
@@ -26,7 +28,16 @@ open class Money(
 interface Expression
 
 class Bank {
-    fun reduce(sum: Expression, currency: String): Expression {
-        return Money.dollar(10)
+    fun reduce(source: Expression, target: String): Money {
+        val sum = source as Sum
+        return sum.reduce(target)
     }
+}
+
+class Sum(
+    val augend: Money,
+    val addend: Money,
+): Expression {
+    fun reduce(target: String) =
+        Money(augend.amount + addend.amount, target)
 }

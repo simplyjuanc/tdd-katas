@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import org.money.Bank
 import org.money.Money
+import org.money.Sum
 
 class MoneyTest {
     @Test
@@ -41,15 +42,25 @@ class MoneyTest {
     }
 
     @Test
-    fun `5 plus 5 should add 10`() {
-        val sum = Money.dollar(5).plus(Money.dollar(5))
-        assertEquals(Money.dollar(10), sum)
-    }
-
-    @Test
     fun `should add multi-currency`() {
         val sum = Money.dollar(5).plus(Money.franc(5))
         val reduced = Bank().reduce(sum, "USD")
         assertEquals(Money.dollar(10), reduced)
     }
+
+    @Test
+    fun `adding return a Sum object`() {
+        val five = Money.dollar(5)
+        val sum = five.plus(five)
+        assertEquals(five, sum.augend)
+        assertEquals(five, sum.addend)
+    }
+
+    @Test
+    fun `bank should reduce an expression`(){
+        val sum = Sum(Money.dollar(7), Money.dollar(5))
+        val result = Bank().reduce(sum, "USD")
+        assertEquals(Money.dollar(12), result)
+    }
 }
+
