@@ -51,4 +51,9 @@ class MoneyTest {
         assertEquals("USD", Money.dollar(1).currency())
         assertEquals("CHF", Money.franc(1).currency())
     }
+
+    @Test
+    fun `should test value equality not class equality`() {
+        assertEquals(Franc(5, "CHF"), Money.franc(5))
+    }
 }

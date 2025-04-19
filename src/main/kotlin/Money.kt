@@ -1,6 +1,6 @@
 package org.money
 
-abstract class Money(
+open class Money(
     open val amount: Int,
     open val currency: String,
 ) {
@@ -9,11 +9,13 @@ abstract class Money(
     override fun equals(other: Any?): Boolean =
         (other is Money) &&
         (amount == other.amount) &&
-        (currency == other.currency())
+        (currency() == other.currency())
 
     override fun hashCode(): Int = amount
 
-    abstract fun times(multiplier: Int): Money
+    fun times(multiplier: Int): Money {
+        return Money(amount * multiplier, currency())
+    }
 
     companion object {
         fun dollar(amount:Int) = Dollar(amount, "USD")
@@ -21,11 +23,7 @@ abstract class Money(
     }
 }
 
-class Dollar(amount: Int, currency: String) : Money(amount, currency) {
-    override fun times(multiplier: Int) = Dollar(amount * multiplier, currency)
-}
+class Dollar(amount: Int, currency: String) : Money(amount, currency)
 
-class Franc(amount: Int, currency: String): Money(amount, currency) {
-    override fun times(multiplier: Int) = Franc(amount * multiplier, currency)
-}
+class Franc(amount: Int, currency: String): Money(amount, currency)
 
