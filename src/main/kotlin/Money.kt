@@ -42,7 +42,10 @@ class Sum(
     val addend: Money,
 ): Expression {
     override fun reduce(bank:Bank, target: String) =
-        Money(augend.amount + addend.amount, target)
+        Money(
+            augend.reduce(bank, target).amount + addend.reduce(bank, target).amount,
+            target
+        )
 }
 
 

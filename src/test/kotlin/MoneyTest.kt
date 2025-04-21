@@ -43,13 +43,6 @@ class MoneyTest {
     }
 
     @Test
-    fun `should add multi-currency`() {
-        val sum = Money.dollar(5).plus(Money.franc(5))
-        val reduced = Bank().reduce(sum, "USD")
-        assertEquals(Money.dollar(10), reduced)
-    }
-
-    @Test
     fun `adding return a Sum object`() {
         val five = Money.dollar(5)
         val sum = five.plus(five)
@@ -81,6 +74,18 @@ class MoneyTest {
     @Test
     fun `a dollar should be a dollar`() {
         assertEquals(1, Bank().rate("USD", "USD"))
+    }
+
+    @Test
+    fun `should add mixed currencies`() {
+        val fiveDollars = Money.dollar(5)
+        val tenFrancs = Money.franc(10)
+
+        val bank = Bank()
+        bank.addRate(CurrencyPair("CHF", "USD"), 2)
+        val result = bank.reduce(fiveDollars.plus( tenFrancs), "USD")
+
+        assertEquals(Money.dollar(10),result)
     }
 }
 
