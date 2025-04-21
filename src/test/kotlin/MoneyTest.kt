@@ -88,5 +88,20 @@ class MoneyTest {
 
         assertEquals(Money.dollar(10),result)
     }
+
+    @Test
+    fun `should correctly add sequential sums`() {
+        val fiveDollars: Expression = Money.dollar(5)
+        val tenFrancs: Expression = Money.franc(10)
+
+        val bank = Bank()
+        bank.addRate(CurrencyPair("CHF", "USD"), 2)
+
+        val sum: Expression = Sum(fiveDollars, tenFrancs).plus(fiveDollars)
+        val result = bank.reduce(sum, "USD")
+
+        assertEquals(Money.dollar(15), result)
+
+    }
 }
 

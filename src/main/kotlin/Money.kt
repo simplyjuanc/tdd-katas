@@ -35,7 +35,7 @@ open class Money(
 
 interface Expression {
     fun reduce(bank: Bank, target: String): Money
-    fun plus(target: Expression): Expression
+    fun plus(addend: Expression): Expression
 
 }
 
@@ -49,9 +49,7 @@ class Sum(
             target
         )
 
-    override fun plus(target: Expression): Expression {
-        TODO("Not yet implemented")
-    }
+    override fun plus(addend: Expression): Expression = Sum(this, addend)
 }
 
 
