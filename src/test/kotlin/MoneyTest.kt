@@ -68,5 +68,11 @@ class MoneyTest {
         val result = Bank().reduce(Money(1, "USD"), "USD")
         assertEquals(Money.dollar(1), result)
     }
+
+    @Test
+    fun `bank should reduce different 2 francs to 1 usd`() {
+        val result = Bank().reduce(Money.franc(2), "USD")
+        assertEquals(Money.dollar(1), result)
+    }
 }
 

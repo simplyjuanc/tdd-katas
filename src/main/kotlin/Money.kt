@@ -15,7 +15,10 @@ open class Money(
 
     override fun toString(): String = "${currency()} $amount"
 
-    override fun reduce(target: String): Money = this
+    override fun reduce(bank: Bank, target: String): Money {
+        val rate = bank.rate(currency(), target)
+        return Money(this.amount / rate, target)
+    }
 
     fun times(multiplier: Int): Money = Money(amount * multiplier, currency())
 
@@ -28,17 +31,21 @@ open class Money(
 }
 
 interface Expression {
-    fun reduce(target: String): Money
-}
-
-class Bank {
-    fun reduce(source: Expression, target: String): Money = source.reduce(target)
+    fun reduce(bank: Bank, target: String): Money
 }
 
 class Sum(
     val augend: Money,
     val addend: Money,
 ): Expression {
-    override fun reduce(target: String) =
+    override fun reduce(bank:Bank, target: String) =
         Money(augend.amount + addend.amount, target)
+}
+
+
+class Bank {
+    fun reduce(source: Expression, target: String): Money = source.reduce(this, target)
+
+    fun rate(source: String, target: String): Int =
+        if (source == "CHF" && target == "USD") 2 else 1
 }
