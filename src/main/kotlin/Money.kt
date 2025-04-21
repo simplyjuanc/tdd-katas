@@ -15,6 +15,8 @@ open class Money(
 
     override fun toString(): String = "${currency()} $amount"
 
+    override fun reduce(target: String): Money = this
+
     fun times(multiplier: Int): Money = Money(amount * multiplier, currency())
 
     fun plus(addend: Money): Sum = Sum(this, addend)
@@ -25,19 +27,18 @@ open class Money(
     }
 }
 
-interface Expression
+interface Expression {
+    fun reduce(target: String): Money
+}
 
 class Bank {
-    fun reduce(source: Expression, target: String): Money {
-        val sum = source as Sum
-        return sum.reduce(target)
-    }
+    fun reduce(source: Expression, target: String): Money = source.reduce(target)
 }
 
 class Sum(
     val augend: Money,
     val addend: Money,
 ): Expression {
-    fun reduce(target: String) =
+    override fun reduce(target: String) =
         Money(augend.amount + addend.amount, target)
 }
