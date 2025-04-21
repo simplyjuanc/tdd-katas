@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import org.money.Bank
+import org.money.CurrencyPair
 import org.money.Money
 import org.money.Sum
 
@@ -71,8 +72,15 @@ class MoneyTest {
 
     @Test
     fun `bank should reduce different 2 francs to 1 usd`() {
-        val result = Bank().reduce(Money.franc(2), "USD")
+        val bank = Bank()
+        bank.addRate(CurrencyPair("CHF", "USD"), 2)
+        val result = bank.reduce(Money.franc(2), "USD")
         assertEquals(Money.dollar(1), result)
+    }
+
+    @Test
+    fun `a dollar should be a dollar`() {
+        assertEquals(1, Bank().rate("USD", "USD"))
     }
 }
 

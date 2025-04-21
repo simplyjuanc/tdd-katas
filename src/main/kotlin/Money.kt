@@ -1,5 +1,8 @@
 package org.money
 
+import java.util.Hashtable
+import javax.management.relation.RelationNotFoundException
+
 open class Money(
     open val amount: Int,
     open val currency: String,
@@ -44,8 +47,22 @@ class Sum(
 
 
 class Bank {
+    private val hashTable = Hashtable<CurrencyPair,Int>()
+
     fun reduce(source: Expression, target: String): Money = source.reduce(this, target)
 
     fun rate(source: String, target: String): Int =
-        if (source == "CHF" && target == "USD") 2 else 1
+        if (source == target) 1 else {
+            hashTable.get(CurrencyPair(source, target)) ?: throw RelationNotFoundException()
+        }
+
+    fun addRate(pair: CurrencyPair, rate: Int) {
+        hashTable.put(pair, rate)
+    }
 }
+
+
+data class CurrencyPair(
+    val from: String,
+    val to: String,
+)
