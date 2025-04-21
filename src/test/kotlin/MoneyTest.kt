@@ -101,7 +101,20 @@ class MoneyTest {
         val result = bank.reduce(sum, "USD")
 
         assertEquals(Money.dollar(15), result)
+    }
 
+    @Test
+    fun `should multiply correctly`() {
+        val fiveDollars: Expression = Money.dollar(5)
+        val tenFrancs: Expression = Money.franc(10)
+
+        val bank = Bank()
+        bank.addRate(CurrencyPair("CHF", "USD"), 2)
+
+        val expression = Sum(fiveDollars, tenFrancs).times(2)
+        val result = bank.reduce(expression, "USD")
+
+        assertEquals(Money.dollar(20), result)
     }
 }
 

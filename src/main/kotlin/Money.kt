@@ -25,7 +25,7 @@ open class Money(
 
     override fun plus(addend: Expression): Sum = Sum(this, addend)
 
-    fun times(multiplier: Int): Expression = Money(amount * multiplier, currency())
+    override fun times(multiplier: Int): Expression = Money(amount * multiplier, currency())
 
     companion object {
         fun dollar(amount:Int) = Money(amount, "USD")
@@ -36,6 +36,7 @@ open class Money(
 interface Expression {
     fun reduce(bank: Bank, target: String): Money
     fun plus(addend: Expression): Expression
+    fun times(multiplier: Int): Expression
 
 }
 
@@ -50,6 +51,9 @@ class Sum(
         )
 
     override fun plus(addend: Expression): Expression = Sum(this, addend)
+
+    override fun times(multiplier: Int): Expression =
+        Sum(this.augend.times(multiplier), this.addend.times(multiplier))
 }
 
 
