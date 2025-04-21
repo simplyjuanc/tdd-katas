@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import org.money.Bank
 import org.money.CurrencyPair
+import org.money.Expression
 import org.money.Money
 import org.money.Sum
 
@@ -78,8 +79,8 @@ class MoneyTest {
 
     @Test
     fun `should add mixed currencies`() {
-        val fiveDollars = Money.dollar(5)
-        val tenFrancs = Money.franc(10)
+        val fiveDollars: Expression = Money.dollar(5)
+        val tenFrancs: Expression = Money.franc(10)
 
         val bank = Bank()
         bank.addRate(CurrencyPair("CHF", "USD"), 2)

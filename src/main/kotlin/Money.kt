@@ -23,9 +23,9 @@ open class Money(
         return Money(this.amount / rate, target)
     }
 
-    fun times(multiplier: Int): Money = Money(amount * multiplier, currency())
+    override fun plus(addend: Expression): Sum = Sum(this, addend)
 
-    fun plus(addend: Money): Sum = Sum(this, addend)
+    fun times(multiplier: Int): Expression = Money(amount * multiplier, currency())
 
     companion object {
         fun dollar(amount:Int) = Money(amount, "USD")
@@ -35,17 +35,23 @@ open class Money(
 
 interface Expression {
     fun reduce(bank: Bank, target: String): Money
+    fun plus(target: Expression): Expression
+
 }
 
 class Sum(
-    val augend: Money,
-    val addend: Money,
+    val augend: Expression,
+    val addend: Expression,
 ): Expression {
     override fun reduce(bank:Bank, target: String) =
         Money(
             augend.reduce(bank, target).amount + addend.reduce(bank, target).amount,
             target
         )
+
+    override fun plus(target: Expression): Expression {
+        TODO("Not yet implemented")
+    }
 }
 
 
